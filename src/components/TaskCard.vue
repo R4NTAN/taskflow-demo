@@ -4,7 +4,7 @@ import StatusBadge from './StatusBadge.vue'
 import PriorityBadge from './PriorityBadge.vue'
 
 const props = defineProps({ task: { type: Object, required: true } })
-const emit = defineEmits(['status-change', 'priority-change'])
+const emit = defineEmits(['status-change', 'priority-change', 'task-select'])
 
 const statusSequence = ['todo', 'progress', 'done']
 const prioritySequence = ['low', 'medium', 'high']
@@ -30,6 +30,10 @@ function changeStatus() {
     id: props.task.id,
     status: statusSequence[(index + 1) % statusSequence.length],
   })
+}
+
+function selectTask() {
+  emit('task-select', props.task.id)
 }
 
 function changePriority() {
@@ -59,6 +63,7 @@ function changePriority() {
       <div class="tf3-card-actions">
         <button type="button" class="tf3-action tf3-action--primary" @click="changeStatus">{{ statusActionText }}</button>
         <button type="button" class="tf3-action" @click="changePriority">Змінити пріоритет</button>
+        <button type="button" class="tf3-action tf3-action--ghost" @click="selectTask">Деталі</button>
       </div>
     </f7-card-content>
   </f7-card>

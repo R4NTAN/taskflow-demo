@@ -8,7 +8,7 @@ background: linear-gradient(135deg,#183451,#101d31 65%,#0d1728); }
 letter-spacing: 1.5px; text-transform: uppercase; }
 .tf3-hero h1 { margin: 12px 0; color: #fff; font-size: 29px; }
 .tf3-hero p { margin: 0; color: #adbed3; line-height: 1.6; }
-.tf3-stat-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr));
+.tf3-stat-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr));
 gap: 14px; margin-top: 18px; }
 .tf3-stat { display: flex; flex-direction: column; gap: 10px; padding: 22px;
 border: 1px solid #263a52; border-radius: 14px; background: #142237; }
@@ -85,3 +85,21 @@ border-radius: 12px; color: #aebfd4; text-align: center; }
 .tf3-stat-label { font-size: 11px; }
 .tf3-container { padding-left: 12px; padding-right: 12px; }
 }
+/* --- Додаткові завдання (UX: цілі дотику 44px, видимий фокус, reduced motion) --- */
+.tf3-action, .tf3-filter-button { min-height: 44px; }
+.tf3-action--ghost { background: transparent; }
+.tf3-stat-total { color: #aabed5; font-size: 18px; font-weight: 500; }
+.tf3-progress { margin-top: 14px; padding: 18px 22px; border: 1px solid #263a52;
+border-radius: 14px; background: #142237; }
+.tf3-progress-head { display: flex; justify-content: space-between; align-items: baseline;
+margin-bottom: 12px; color: #aabed5; font-size: 13px; }
+.tf3-progress-head strong { color: #fff; font-size: 22px; }
+.tf3-progress-track { height: 10px; overflow: hidden; border-radius: 10px; background: #263a52; }
+.tf3-progress-fill { height: 100%; border-radius: 10px; background: #35b4e5;
+transition: width .3s ease-out; }
+.tf3-detail { margin-top: 20px; padding: 20px; border: 1px solid #35b4e5;
+border-radius: 14px; background: #12304a; }
+.tf3-detail-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.tf3-detail-title { margin: 12px 0 0; color: #fff; font-size: 19px; }
+@media (max-width: 740px) { .tf3-stat-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }
+@media (prefers-reduced-motion: reduce) { .tf3-progress-fill { transition: none; } }

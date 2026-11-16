@@ -1,13 +1,24 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import AppTabbar from '../components/AppTabbar.vue'
 import TaskCard from '../components/TaskCard.vue'
+import TaskCounter from '../components/TaskCounter.vue'
+import TaskDetails from '../components/TaskDetails.vue'
 import { taskState, setTaskStatus, setTaskPriority } from '../store/tasks'
 import '../css/task-components.css'
 
+const selectedId = ref(null)
+
 const totalTasks = computed(() => taskState.tasks.length)
-const completedTasks = computed(() => taskState.tasks.filter((t) => t.status === 'done').length)
-const progressTasks = computed(() => taskState.tasks.filter((t) => t.status === 'progress').length)
+const countBy = (status) => taskState.tasks.filter((t) => t.status === status).length
+const plannedTasks = computed(() => countBy('todo'))
+const progressTasks = computed(() => countBy('progress'))
+const completedTasks = computed(() => countBy('done'))
+const completedPercent = computed(() =>
+  totalTasks.value ? Math.round((completedTasks.value / totalTasks.value) * 100) : 0)
+
+const selectedTask = computed(() =>
+  taskState.tasks.find((t) => t.id === selectedId.value) || null)
 
 const activeTasks = computed(() => {
   const order = { high: 0, medium: 1, low: 2 }
@@ -19,6 +30,7 @@ const activeTasks = computed(() => {
 
 function handleStatusChange(payload) { setTaskStatus(payload) }
 function handlePriorityChange(payload) { setTaskPriority(payload) }
+function handleTaskSelect(id) { selectedId.value = id }
 </script>
 
 <template>
@@ -35,10 +47,23 @@ function handlePriorityChange(payload) { setTaskPriority(payload) }
       </section>
 
       <section class="tf3-stat-grid">
-        <div class="tf3-stat"><span class="tf3-stat-label">Усього завдань</span><strong>{{ totalTasks }}</strong></div>
-        <div class="tf3-stat"><span class="tf3-stat-label">У роботі</span><strong>{{ progressTasks }}</strong></div>
-        <div class="tf3-stat"><span class="tf3-stat-label">Виконано</span><strong>{{ completedTasks }}</strong></div>
+        <TaskCounter label="Усього завдань" :count="totalTasks" />
+        <TaskCounter label="Заплановано" :count="plannedTasks" />
+        <TaskCounter label="У роботі" :count="progressTasks" />
+        <TaskCounter label="Виконано" :count="completedTasks" :total="totalTasks" />
       </section>
+
+      <section class="tf3-progress" aria-label="Відсоток виконаних завдань">
+        <div class="tf3-progress-head">
+          <span>Виконано завдань</span><strong>{{ completedPercent }}%</strong>
+        </div>
+        <div class="tf3-progress-track" role="progressbar" aria-valuemin="0"
+          aria-valuemax="100" :aria-valuenow="completedPercent">
+          <div class="tf3-progress-fill" :style="{ width: completedPercent + '%' }"></div>
+        </div>
+      </section>
+
+      <TaskDetails :task="selectedTask" @close="selectedId = null" />
 
       <section class="tf3-section">
         <div class="tf3-section-heading">
@@ -47,7 +72,8 @@ function handlePriorityChange(payload) { setTaskPriority(payload) }
         </div>
         <div v-if="activeTasks.length" class="tf3-task-grid">
           <TaskCard v-for="task in activeTasks" :key="task.id" :task="task"
-            @status-change="handleStatusChange" @priority-change="handlePriorityChange" />
+            @status-change="handleStatusChange" @priority-change="handlePriorityChange"
+            @task-select="handleTaskSelect" />
         </div>
         <div v-else class="tf3-empty">Наразі всі завдання виконані.</div>
       </section>
