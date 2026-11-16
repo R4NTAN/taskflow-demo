@@ -8,40 +8,34 @@
 
     <div class="app-content">
       <div class="page-heading">
-        <h1>Головна</h1>
-        <p>Огляд ваших завдань</p>
+        <h1>Мої завдання</h1>
+        <p>Керуйте завданнями та відстежуйте їх виконання.</p>
       </div>
 
       <div class="stats-grid">
         <div class="stat-card">
           <f7-icon f7="square_list" />
-          <div class="stat-value">{{ totalTasks }}</div>
+          <div class="stat-value">{{ tasks.length }}</div>
           <div class="stat-label">Усього завдань</div>
         </div>
         <div class="stat-card stat-card-success">
           <f7-icon f7="checkmark_circle" />
-          <div class="stat-value">{{ completedTasks }}</div>
+          <div class="stat-value">{{ completedCount }} / {{ tasks.length }}</div>
           <div class="stat-label">Виконано</div>
         </div>
       </div>
 
       <div class="section-heading">
-        <h2>Останні завдання</h2>
+        <h2>Список завдань</h2>
         <f7-link href="/tasks/">Переглянути всі</f7-link>
       </div>
 
-      <div class="task-list">
-        <div v-for="task in recentTasks" :key="task.id" class="task-row">
-          <f7-icon
-            :f7="task.completed ? 'checkmark_circle_fill' : 'circle'"
-            :class="{ 'completed-icon': task.completed }"
-          />
-          <span>{{ task.title }}</span>
-        </div>
+      <div class="task-card-list">
+        <TaskCard v-for="task in tasks" :key="task.id" :task="task" />
       </div>
 
-      <f7-button fill large href="/tasks/" class="page-action">
-        Перейти до завдань
+      <f7-button fill large href="/about/" class="page-action">
+        Про застосунок
       </f7-button>
     </div>
 
@@ -50,11 +44,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import AppTabbar from '../components/AppTabbar.vue';
-import { tasks } from '../data/tasks.js';
+import TaskCard from '../components/TaskCard.vue';
+import { tasks as initialTasks } from '../data/tasks.js';
 
-const totalTasks = computed(() => tasks.length);
-const completedTasks = computed(() => tasks.filter(t => t.completed).length);
-const recentTasks = computed(() => tasks.slice(-3).reverse());
+const tasks = ref(initialTasks);
+
+const completedCount = computed(
+  () => tasks.value.filter((task) => task.status === 'done').length
+);
 </script>

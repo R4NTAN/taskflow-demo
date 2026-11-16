@@ -59,3 +59,34 @@
   .stat-value { font-size: 26px; }
   .app-tab-label { font-size: 10px; }
 }
+
+/* Картка завдання (TaskCard) */
+:root {
+  --app-surface: #ffffff;
+  --app-text: #172033;
+  --app-muted: #64748b;
+  --app-border: #e5eaf2;
+}
+
+.task-card-list { display: grid; gap: 12px; }
+
+.task-card {
+  padding: 18px;
+  border-radius: 16px;
+  background: var(--app-surface);
+  border: 1px solid var(--app-border);
+}
+.task-card__top { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.task-card__status,
+.task-card__priority { padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+
+.status-todo { background: #e2e8f0; color: #475569; }
+.status-progress { background: #dbeafe; color: #1d4ed8; }
+.status-done { background: #dcfce7; color: #15803d; }
+
+.priority-low { background: #f1f5f9; color: #64748b; }
+.priority-medium { background: #fef3c7; color: #92400e; }
+.priority-high { background: #fee2e2; color: #b91c1c; }
+
+.task-card__title { margin: 0 0 8px; font-size: 16px; color: var(--app-text); }
+.task-card__description { margin: 0; font-size: 13px; line-height: 1.5; color: var(--app-muted); }
